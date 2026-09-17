@@ -485,7 +485,7 @@ export default function ResultsPortalPage() {
                 {portalConfig.queryContact.title}
               </div>
               <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
-                {portalConfig.queryContact.instruction}
+                {portalConfig.queryContact.notFoundInstruction}
               </p>
               <div className="mt-2">
                 <a
@@ -560,6 +560,19 @@ export default function ResultsPortalPage() {
                   </>
                 )}
               </button>
+
+              {/* Subtle Query Assistance Note */}
+              <div className="mt-4 pt-3 border-t border-white/5 text-center">
+                <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
+                  {portalConfig.queryContact.searchHelpText}:{" "}
+                  <a
+                    href={`mailto:${portalConfig.queryContact.email}`}
+                    className="text-amber-400 hover:text-amber-300 underline underline-offset-2 decoration-amber-500/40 transition-colors"
+                  >
+                    {portalConfig.queryContact.email}
+                  </a>
+                </p>
+              </div>
             </form>
           </section>
         )}

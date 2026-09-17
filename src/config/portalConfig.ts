@@ -45,6 +45,8 @@ export const portalConfig = {
   queryContact: {
     title: "RESULT QUERIES & DISCREPANCIES",
     instruction: "For any discrepancy or query regarding your result, please contact:",
+    notFoundInstruction: "If you wrote the exam and couldn't find your result, or have any discrepancy, please contact:",
+    searchHelpText: "If you wrote the exam and cannot find your result, please contact",
     email: "vikasmhgdg@gmail.com",
   },
 };
