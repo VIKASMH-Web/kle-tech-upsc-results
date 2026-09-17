@@ -210,14 +210,27 @@ export default function ResultsPortalPage() {
         setSearchStatus("not_found");
         return;
       }
-      const data = await res.json();
-      if (!Array.isArray(data)) {
+      const rawData = await res.json();
+      if (!Array.isArray(rawData)) {
         setSearchStatus("not_found");
         return;
       }
 
+      // Compute dynamic competition ranking descending by score
+      const sorted = [...rawData].sort((a, b) => Number(b.score) - Number(a.score));
+      let currentRank = 1;
+      const rankedData = sorted.map((candidate, idx) => {
+        if (idx > 0 && Number(candidate.score) < Number(sorted[idx - 1].score)) {
+          currentRank = idx + 1;
+        }
+        return {
+          ...candidate,
+          rank: currentRank,
+        };
+      });
+
       const normalizedInput = usnQuery.trim().toUpperCase().replace(/\s+/g, "");
-      const match = data.find((item: { usn?: string; rank: number; name: string; score: number }) => {
+      const match = rankedData.find((item: { usn?: string; rank: number; name: string; score: number }) => {
         const candidateUsn = (item.usn || "").toString().trim().toUpperCase().replace(/\s+/g, "");
         return candidateUsn === normalizedInput;
       });
@@ -480,7 +493,7 @@ export default function ResultsPortalPage() {
                 <div className="inline-block relative">
                   <div className="absolute inset-0 bg-amber-500/20 blur-xl rounded-full scale-150 pointer-events-none" />
                   <div className="relative text-3xl sm:text-4xl font-extrabold font-serif text-amber-300 tracking-tight drop-shadow-[0_2px_12px_rgba(245,158,11,0.4)]">
-                    {String(candidateResult.rank).padStart(2, "0")}
+                    #{candidateResult.rank}
                   </div>
                 </div>
                 <div className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5">
@@ -645,6 +658,11 @@ export default function ResultsPortalPage() {
             <p className="text-sm text-slate-300 mt-1.5 leading-relaxed">
               {portalConfig.notFoundSubtitle}
             </p>
+            {portalConfig.notFoundAdvisory && (
+              <p className="text-xs sm:text-sm text-amber-200/90 mt-3 max-w-md mx-auto leading-relaxed bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
+                {portalConfig.notFoundAdvisory}
+              </p>
+            )}
 
             <div className="mt-6 pt-4 border-t border-white/10">
               <button

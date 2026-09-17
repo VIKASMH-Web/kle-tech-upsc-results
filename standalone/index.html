@@ -298,7 +298,7 @@
         <!-- WhatsApp Interview Message -->
         <div class="bg-[#0b1b42] border border-amber-500/30 rounded-xl p-4 text-center animate-fadeSlideUp-5">
           <p class="text-xs sm:text-sm text-amber-100/90 leading-relaxed font-normal">
-            “Your interview details will be sent to your registered WhatsApp number. Please keep checking your WhatsApp for further communication.”
+            “Interview details and further communication will be sent to your registered WhatsApp number. Please check your WhatsApp for further updates.”
           </p>
         </div>
       </div>
@@ -411,10 +411,13 @@
       </div>
 
       <h4 class="font-serif text-lg sm:text-xl font-bold text-rose-200 uppercase tracking-wide">
-        Result not found.
+        NO RESULT FOUND
       </h4>
       <p class="text-sm text-slate-300 mt-1.5 leading-relaxed">
-        Please check your USN and try again.
+        Please check the USN and try again.
+      </p>
+      <p class="text-xs sm:text-sm text-amber-200/90 mt-3 max-w-md mx-auto leading-relaxed bg-amber-500/10 border border-amber-500/30 rounded-lg p-3">
+        You need to write the exam conducted by KLE Tech UPSC Aspirants Club to view your result.
       </p>
 
       <div class="mt-6 pt-4 border-t border-white/10">
@@ -598,13 +601,27 @@
 
     async function loadResults() {
       if (candidatesCache) return candidatesCache;
-      const candidatePaths = ['results.json', './results.json', '/results.json', '../results.json'];
+      const candidatePaths = ['results.json', './results.json', '/results.json', '../results.json', 'data/results.json'];
       for (const p of candidatePaths) {
         try {
           const res = await fetch(p);
           if (res.ok) {
-            candidatesCache = await res.json();
-            return candidatesCache;
+            const raw = await res.json();
+            if (Array.isArray(raw)) {
+              // Compute dynamic competition ranking descending by score
+              const sorted = [...raw].sort((a, b) => Number(b.score) - Number(a.score));
+              let currentRank = 1;
+              candidatesCache = sorted.map((candidate, idx) => {
+                if (idx > 0 && Number(candidate.score) < Number(sorted[idx - 1].score)) {
+                  currentRank = idx + 1;
+                }
+                return {
+                  ...candidate,
+                  rank: currentRank
+                };
+              });
+              return candidatesCache;
+            }
           }
         } catch (e) {
           // try next path
@@ -649,7 +666,7 @@
 
         if (match) {
           currentCandidate = match;
-          document.getElementById('cardRank').textContent = String(match.rank).padStart(2, '0');
+          document.getElementById('cardRank').textContent = '#' + match.rank;
           document.getElementById('cardName').textContent = match.name;
           document.getElementById('cardUsn').textContent = 'USN: ' + (match.usn || '').toUpperCase();
           document.getElementById('cardScore').textContent = '0';
@@ -915,9 +932,9 @@
       ctx.stroke();
 
       // Rank
-      ctx.font = "bold 100px 'Cinzel', Georgia, serif";
+      ctx.font = "bold 96px 'Cinzel', Georgia, serif";
       ctx.fillStyle = '#fbbf24';
-      ctx.fillText(String(candidate.rank).padStart(2, '0'), 540, 580);
+      ctx.fillText('#' + candidate.rank, 540, 580);
       ctx.font = "700 18px 'Plus Jakarta Sans', sans-serif";
       ctx.fillStyle = '#94a3b8';
       ctx.fillText('RANK', 540, 615);

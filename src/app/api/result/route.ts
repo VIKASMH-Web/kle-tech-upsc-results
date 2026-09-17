@@ -11,9 +11,10 @@ interface CandidateResult {
 }
 
 function loadResultsData(): CandidateResult[] {
-  // Check root results.json, then public/results.json, then src/data/results.json
+  // Check root results.json, then data/results.json, public/results.json, then src/data/results.json
   const candidatePaths = [
     path.join(process.cwd(), "results.json"),
+    path.join(process.cwd(), "data", "results.json"),
     path.join(process.cwd(), "public", "results.json"),
     path.join(process.cwd(), "src", "data", "results.json"),
   ];
@@ -23,8 +24,22 @@ function loadResultsData(): CandidateResult[] {
       try {
         const raw = fs.readFileSync(filePath, "utf-8");
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // Dynamically sort descending by score
+          const sorted = [...parsed].sort((a, b) => Number(b.score) - Number(a.score));
+          // Calculate competition ranking for ties
+          let currentRank = 1;
+          return sorted.map((candidate, idx) => {
+            if (idx > 0 && Number(candidate.score) < Number(sorted[idx - 1].score)) {
+              currentRank = idx + 1;
+            }
+            return {
+              rank: currentRank,
+              name: candidate.name,
+              usn: candidate.usn,
+              score: candidate.score,
+            };
+          });
         }
       } catch (err) {
         console.error(`Error reading ${filePath}:`, err);

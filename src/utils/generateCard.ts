@@ -196,8 +196,8 @@ export async function generateResultCardBlob(
   // Inner Card Content:
 
   // --- RANK SECTION ---
-  const formattedRank = String(candidate.rank).padStart(2, "0");
-  ctx.font = "bold 100px 'Cinzel', 'Playfair Display', Georgia, serif";
+  const formattedRank = "#" + candidate.rank;
+  ctx.font = "bold 96px 'Cinzel', 'Playfair Display', Georgia, serif";
   ctx.fillStyle = "#fbbf24";
   ctx.fillText(formattedRank, 540, 580);
 

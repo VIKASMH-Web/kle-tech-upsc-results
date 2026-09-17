@@ -30,11 +30,13 @@ export const portalConfig = {
   // Status & WhatsApp Communication
   qualificationStatus: "QUALIFIED FOR ROUND 2",
   interviewMessage:
-    "Your interview details will be sent to your registered WhatsApp number. Please keep checking your WhatsApp for further communication.",
+    "Interview details and further communication will be sent to your registered WhatsApp number. Please check your WhatsApp for further updates.",
 
   // Not Found State Messages
-  notFoundTitle: "Result not found.",
+  notFoundTitle: "NO RESULT FOUND",
   notFoundSubtitle: "Please check your USN and try again.",
+  notFoundAdvisory:
+    "You need to write the exam conducted by KLE Tech UPSC Aspirants Club to view your result.",
 
   // Unannounced State Message
   unannouncedNotice: "RESULTS WILL BE ANNOUNCED SOON",
