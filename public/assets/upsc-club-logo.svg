@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160">
+  <rect width="160" height="160" rx="20" fill="#081432" stroke="#c8963e" stroke-width="2"/>
+  <circle cx="80" cy="70" r="38" fill="none" stroke="#eab308" stroke-width="2.5" stroke-dasharray="4 2"/>
+  <circle cx="80" cy="70" r="28" fill="#0c1f4d" stroke="#c8963e" stroke-width="1.5"/>
+  <!-- Ashoka Chakra Spokes -->
+  <g stroke="#eab308" stroke-width="1.2" opacity="0.85">
+    <line x1="80" y1="44" x2="80" y2="96"/>
+    <line x1="54" y1="70" x2="106" y2="70"/>
+    <line x1="61.6" y1="51.6" x2="98.4" y2="88.4"/>
+    <line x1="61.6" y1="88.4" x2="98.4" y2="51.6"/>
+  </g>
+  <circle cx="80" cy="70" r="6" fill="#eab308"/>
+  <text x="80" y="126" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" fill="#fef3c7" letter-spacing="1">UPSC ASPIRANTS</text>
+  <text x="80" y="139" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" font-weight="600" fill="#94a3b8" letter-spacing="1.5">CLUB LOGO</text>
+</svg>

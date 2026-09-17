@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --navy-950: #040918;
+    --navy-900: #08122a;
+    --navy-850: #0c1a3b;
+    --navy-800: #102450;
+    --navy-700: #19387b;
+    --royal-600: #1d4ed8;
+    --royal-500: #2563eb;
+    --gold-300: #fde047;
+    --gold-400: #eab308;
+    --gold-500: #d97706;
+    --gold-600: #b45309;
+    --gold-accent: #c8963e;
+    --saffron-500: #f97316;
+    --bg-page: #050b1d;
+    --surface-card: #0a1636;
+    --surface-elevated: #0f204c;
+    --text-heading: #f8fafc;
+    --text-body: #cbd5e1;
+    --text-muted: #94a3b8;
+    --border-subtle: rgba(255, 255, 255, 0.09);
+    --border-gold: rgba(200, 150, 62, 0.3);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: #050b1d;
+    color: #cbd5e1;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Typography */
+.font-display {
+  font-family: 'Cinzel', 'Playfair Display', Georgia, Cambria, 'Times New Roman', serif;
+}
+
+.font-sans-editorial {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Institutional Cards */
+.institutional-card {
+  background: linear-gradient(180deg, rgba(14, 28, 65, 0.7) 0%, rgba(9, 18, 44, 0.85) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.institutional-card:hover {
+  border-color: rgba(200, 150, 62, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.6), 0 0 20px -4px rgba(200, 150, 62, 0.15);
+}
+
+.institutional-card-white {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #0f172a;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+}
+
+/* Gold Accents & Highlights */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #fef3c7 0%, #d97706 60%, #b45309 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gold-gradient-subtle {
+  background: linear-gradient(135deg, #fffbeb 0%, #fde68a 50%, #d97706 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.border-gold-accent {
+  border-color: rgba(200, 150, 62, 0.35);
+}
+
+/* Glassmorphism */
+.navy-glass {
+  background: rgba(8, 18, 42, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navy-glass-heavy {
+  background: rgba(6, 13, 31, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(200, 150, 62, 0.2);
+}
+
+/* Institutional Badges */
+.badge-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: rgba(200, 150, 62, 0.12);
+  color: #eab308;
+  border: 1px solid rgba(200, 150, 62, 0.3);
+}
+
+/* Geometric Grid Background */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.bg-radial-navy {
+  background: radial-gradient(circle at 50% 0%, rgba(29, 78, 216, 0.18) 0%, rgba(8, 18, 42, 0) 70%);
+}
+
+/* Ashoka Chakra Spin Subtle */
+@keyframes spin-slow-chakra {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-chakra-slow {
+  animation: spin-slow-chakra 160s linear infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #040918;
+}
+::-webkit-scrollbar-thumb {
+  background: #14275e;
+  border-radius: 4px;
+  border: 2px solid #040918;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c8963e;
+}
+
+/* Print Styles for Certificate & Results */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}

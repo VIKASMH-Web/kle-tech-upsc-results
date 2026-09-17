@@ -1,0 +1,50 @@
+[
+  {
+    "rank": 1,
+    "name": "Aditya Patil",
+    "usn": "USN001",
+    "score": 88
+  },
+  {
+    "rank": 2,
+    "name": "Sneha Kulkarni",
+    "usn": "USN002",
+    "score": 85
+  },
+  {
+    "rank": 3,
+    "name": "Rohan Deshmukh",
+    "usn": "01FE22BCS045",
+    "score": 83
+  },
+  {
+    "rank": 4,
+    "name": "Pooja Hegde",
+    "usn": "01FE22BCS001",
+    "score": 81
+  },
+  {
+    "rank": 5,
+    "name": "Vikram Joshi",
+    "usn": "01FE21BEC012",
+    "score": 79
+  },
+  {
+    "rank": 6,
+    "name": "Ananya Sharma",
+    "usn": "01FE23BAI018",
+    "score": 77
+  },
+  {
+    "rank": 7,
+    "name": "Karthik Rao",
+    "usn": "01FE22BME034",
+    "score": 75
+  },
+  {
+    "rank": 8,
+    "name": "Deepa Hiremath",
+    "usn": "01FE22BCS092",
+    "score": 74
+  }
+]
