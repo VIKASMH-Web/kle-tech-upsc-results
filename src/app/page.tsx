@@ -196,9 +196,19 @@ export default function ResultsPortalPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050b1d] text-slate-100 flex flex-col justify-between selection:bg-amber-500/25 selection:text-amber-100 font-sans">
+    <div className="min-h-screen bg-[#050b1d] text-slate-100 flex flex-col justify-between selection:bg-amber-500/25 selection:text-amber-100 font-sans relative overflow-x-hidden">
+      {/* Background Campus Image with Institutional Overlay */}
+      <div
+        className="fixed inset-0 pointer-events-none z-0 bg-cover bg-center bg-no-repeat opacity-35"
+        style={{
+          backgroundImage: "url('/assets/campus-bg.png')",
+        }}
+      />
+      {/* Deep Navy Gradient Overlay for perfect text contrast and institutional prestige */}
+      <div className="fixed inset-0 pointer-events-none z-0 bg-gradient-to-b from-[#050b1d]/90 via-[#061028]/85 to-[#040817]/95 backdrop-blur-[1px]" />
+
       {/* Main Content Area */}
-      <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex-1 flex flex-col justify-center">
+      <main className="w-full max-w-2xl mx-auto px-4 sm:px-6 py-6 sm:py-10 flex-1 flex flex-col justify-center relative z-10">
         
         {/* ============================================================ */}
         {/* LOGO PLACEHOLDERS & INSTITUTIONAL HEADER */}
@@ -515,7 +525,7 @@ export default function ResultsPortalPage() {
       {/* ============================================================ */}
       {/* MINIMAL FOOTER WITH OFFICIAL SOCIAL LINKS */}
       {/* ============================================================ */}
-      <footer className="w-full border-t border-white/10 bg-[#040918] py-5 px-4 text-center mt-6">
+      <footer className="w-full border-t border-white/10 bg-[#040918] py-5 px-4 text-center mt-6 relative z-10">
         <div className="max-w-md mx-auto space-y-2.5">
           <div className="text-xs sm:text-sm font-bold tracking-wider text-slate-200 uppercase">
             {portalConfig.clubName}
