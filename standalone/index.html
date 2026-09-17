@@ -44,6 +44,46 @@
     .animate-fadeIn {
       animation: fadeIn 0.3s ease-out forwards;
     }
+
+    /* Result Reveal Animations */
+    @keyframes resultCardReveal {
+      0% { opacity: 0; transform: translateY(24px) scale(0.95); }
+      65% { opacity: 1; transform: translateY(-3px) scale(1.01); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.65); }
+      70% { transform: scale(1.12); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    @keyframes statusGlowPulse {
+      0%, 100% {
+        box-shadow: 0 0 15px -1px rgba(16, 185, 129, 0.4), inset 0 0 12px rgba(16, 185, 129, 0.15);
+        border-color: rgba(16, 185, 129, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 28px 4px rgba(16, 185, 129, 0.75), inset 0 0 20px rgba(16, 185, 129, 0.3);
+        border-color: rgba(52, 211, 153, 0.9);
+      }
+    }
+    @keyframes checkBounce {
+      0% { transform: scale(0) rotate(-45deg); opacity: 0; }
+      60% { transform: scale(1.3) rotate(8deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    @keyframes fadeSlideUp {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-resultCardReveal { animation: resultCardReveal 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animate-popIn { animation: popIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    .animate-statusGlowPulse { animation: statusGlowPulse 2.4s ease-in-out infinite; }
+    .animate-checkBounce { animation: checkBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s both; }
+    .animate-fadeSlideUp-1 { animation: fadeSlideUp 0.5s ease-out 0.1s both; }
+    .animate-fadeSlideUp-2 { animation: fadeSlideUp 0.5s ease-out 0.2s both; }
+    .animate-fadeSlideUp-3 { animation: fadeSlideUp 0.5s ease-out 0.35s both; }
+    .animate-fadeSlideUp-4 { animation: fadeSlideUp 0.5s ease-out 0.5s both; }
+    .animate-fadeSlideUp-5 { animation: fadeSlideUp 0.5s ease-out 0.65s both; }
   </style>
 </head>
 <body class="min-h-screen bg-[#050b1d] text-slate-100 flex flex-col justify-between selection:bg-amber-500/25 selection:text-amber-100 font-sans relative overflow-x-hidden">
@@ -194,8 +234,18 @@
     <!-- ============================================================ -->
     <!-- VIEW 2: CANDIDATE RESULT CARD (Shown upon match) -->
     <!-- ============================================================ -->
-    <section id="resultSection" class="hidden bg-[#081432] border-2 border-amber-500/50 rounded-2xl p-5 sm:p-8 shadow-2xl shadow-black/60 relative overflow-hidden animate-fadeIn">
-      <div class="text-center pb-4 border-b border-amber-500/20">
+    <section id="resultSection" class="hidden bg-[#081432] border-2 border-amber-500/50 rounded-2xl p-5 sm:p-8 shadow-2xl shadow-black/60 relative overflow-hidden animate-resultCardReveal">
+      <!-- Confetti Celebration Burst Canvas -->
+      <canvas id="confettiCanvas" class="absolute inset-0 pointer-events-none z-20 w-full h-full"></canvas>
+
+      <!-- Glowing top border beam -->
+      <div class="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent animate-pulse pointer-events-none"></div>
+
+      <!-- Subtle corner watermark accent -->
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none"></div>
+
+      <!-- Card Official Top Bar -->
+      <div class="text-center pb-4 border-b border-amber-500/20 animate-fadeSlideUp-1">
         <div class="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
           OFFICE BEARER RECRUITMENT
         </div>
@@ -209,20 +259,23 @@
 
       <div class="py-6 space-y-5">
         <!-- Rank -->
-        <div class="text-center">
-          <div id="cardRank" class="text-3xl sm:text-4xl font-extrabold font-serif text-amber-300 tracking-tight">01</div>
+        <div class="text-center animate-popIn">
+          <div class="inline-block relative">
+            <div class="absolute inset-0 bg-amber-500/20 blur-xl rounded-full scale-150 pointer-events-none"></div>
+            <div id="cardRank" class="relative text-3xl sm:text-4xl font-extrabold font-serif text-amber-300 tracking-tight drop-shadow-[0_2px_12px_rgba(245,158,11,0.4)]">01</div>
+          </div>
           <div class="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5">RANK</div>
         </div>
 
         <!-- Name & USN -->
-        <div class="text-center pt-2 border-t border-white/5">
+        <div class="text-center pt-2 border-t border-white/5 animate-fadeSlideUp-2">
           <div id="cardName" class="text-lg sm:text-xl font-bold text-white tracking-wide">Candidate Name</div>
           <div id="cardUsn" class="text-xs sm:text-sm font-bold text-blue-300 tracking-wider mt-0.5">USN: USN001</div>
           <div class="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5">CANDIDATE NAME</div>
         </div>
 
         <!-- Score -->
-        <div class="text-center pt-2 border-t border-white/5">
+        <div class="text-center pt-2 border-t border-white/5 animate-fadeSlideUp-3">
           <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
             <span id="cardScore">85</span> <span class="text-base sm:text-lg font-medium text-slate-400">/ 100</span>
           </div>
@@ -230,11 +283,11 @@
         </div>
 
         <!-- Status -->
-        <div class="pt-3">
-          <div class="bg-emerald-950/60 border-2 border-emerald-500/70 rounded-xl py-3 px-4 text-center shadow-inner">
+        <div class="pt-3 animate-fadeSlideUp-4">
+          <div class="bg-emerald-950/70 border-2 border-emerald-500/70 rounded-xl py-3.5 px-4 text-center shadow-inner animate-statusGlowPulse">
             <div class="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] text-emerald-400/90 uppercase">STATUS</div>
             <div class="text-base sm:text-lg font-extrabold text-emerald-300 tracking-wider uppercase mt-0.5 flex items-center justify-center gap-2">
-              <svg class="w-5 h-5 text-emerald-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-emerald-400 shrink-0 animate-checkBounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
               <span>QUALIFIED FOR ROUND 2</span>
@@ -243,7 +296,7 @@
         </div>
 
         <!-- WhatsApp Interview Message -->
-        <div class="bg-[#0b1b42] border border-amber-500/30 rounded-xl p-4 text-center">
+        <div class="bg-[#0b1b42] border border-amber-500/30 rounded-xl p-4 text-center animate-fadeSlideUp-5">
           <p class="text-xs sm:text-sm text-amber-100/90 leading-relaxed font-normal">
             “Your interview details will be sent to your registered WhatsApp number. Please keep checking your WhatsApp for further communication.”
           </p>
@@ -251,7 +304,7 @@
       </div>
 
       <!-- Action Buttons: DOWNLOAD, SHARE, and CHECK ANOTHER USN -->
-      <div class="pt-5 border-t border-white/10 space-y-3">
+      <div class="pt-5 border-t border-white/10 space-y-3 animate-fadeSlideUp-5">
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
           <!-- 1. DOWNLOAD RESULT CARD -->
           <button
@@ -599,11 +652,20 @@
           document.getElementById('cardRank').textContent = String(match.rank).padStart(2, '0');
           document.getElementById('cardName').textContent = match.name;
           document.getElementById('cardUsn').textContent = 'USN: ' + (match.usn || '').toUpperCase();
-          document.getElementById('cardScore').textContent = match.score;
+          document.getElementById('cardScore').textContent = '0';
 
           document.getElementById('searchSection').classList.add('hidden');
           document.getElementById('notFoundSection').classList.add('hidden');
-          document.getElementById('resultSection').classList.remove('hidden');
+          
+          const resultSec = document.getElementById('resultSection');
+          resultSec.classList.remove('hidden');
+          resultSec.classList.remove('animate-resultCardReveal');
+          void resultSec.offsetWidth;
+          resultSec.classList.add('animate-resultCardReveal');
+
+          // Trigger score count-up and celebratory confetti
+          animateScoreCountUp(match.score);
+          launchConfetti();
         } else {
           currentCandidate = null;
           document.getElementById('searchSection').classList.add('hidden');
@@ -611,6 +673,91 @@
           document.getElementById('notFoundSection').classList.remove('hidden');
         }
       }, 250);
+    }
+
+    function animateScoreCountUp(target) {
+      const el = document.getElementById('cardScore');
+      let start = null;
+      const duration = 850;
+      function step(now) {
+        if (!start) start = now;
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        el.textContent = Math.round(target * ease);
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = target;
+        }
+      }
+      requestAnimationFrame(step);
+    }
+
+    function launchConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      canvas.width = canvas.parentElement ? canvas.parentElement.offsetWidth : 600;
+      canvas.height = canvas.parentElement ? canvas.parentElement.offsetHeight : 650;
+
+      const colors = ['#f59e0b', '#10b981', '#fbbf24', '#34d399', '#ffffff', '#d97706', '#60a5fa'];
+      const particles = [];
+      for (let i = 0; i < 70; i++) {
+        particles.push({
+          x: canvas.width / 2 + (Math.random() - 0.5) * 140,
+          y: 35 + Math.random() * 25,
+          w: 6 + Math.random() * 6,
+          h: 4 + Math.random() * 7,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vx: (Math.random() - 0.5) * 9,
+          vy: -Math.random() * 6 - 2.5,
+          angle: Math.random() * 360,
+          vAngle: (Math.random() - 0.5) * 14,
+          opacity: 1
+        });
+      }
+
+      const gravity = 0.16;
+      const drag = 0.985;
+      const start = performance.now();
+
+      function render(now) {
+        const elapsed = now - start;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        let visible = 0;
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += gravity;
+          p.vx *= drag;
+          p.angle += p.vAngle;
+
+          if (elapsed > 1800) {
+            p.opacity = Math.max(0, p.opacity - 0.025);
+          }
+
+          if (p.opacity > 0 && p.y < canvas.height + 40) {
+            visible++;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.angle * Math.PI) / 180);
+            ctx.globalAlpha = p.opacity;
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          }
+        }
+        if (visible > 0 && elapsed < 3400) {
+          requestAnimationFrame(render);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      requestAnimationFrame(render);
     }
 
     let currentCandidate = null;

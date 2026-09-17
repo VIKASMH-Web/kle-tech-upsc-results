@@ -29,6 +29,126 @@ interface ResultData {
   status: string;
 }
 
+/**
+ * Animated number counter that counts up to the candidate's score
+ */
+function AnimatedScore({ score }: { score: number }) {
+  const [displayScore, setDisplayScore] = useState(0);
+
+  React.useEffect(() => {
+    let start = 0;
+    const end = score;
+    const duration = 850;
+    const startTime = performance.now();
+    let frameId: number;
+
+    const tick = (now: number) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // easeOutExpo
+      const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+      setDisplayScore(Math.round(start + (end - start) * ease));
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick);
+      }
+    };
+
+    frameId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frameId);
+  }, [score]);
+
+  return <>{displayScore}</>;
+}
+
+/**
+ * Lightweight celebratory confetti burst when results are revealed
+ */
+function ConfettiCanvas() {
+  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+
+  React.useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = canvas.parentElement?.offsetWidth || 600;
+    canvas.height = canvas.parentElement?.offsetHeight || 650;
+
+    const colors = [
+      "#f59e0b",
+      "#10b981",
+      "#fbbf24",
+      "#34d399",
+      "#ffffff",
+      "#d97706",
+      "#60a5fa",
+    ];
+    const particles = Array.from({ length: 70 }, () => ({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 140,
+      y: 35 + Math.random() * 25,
+      w: 6 + Math.random() * 6,
+      h: 4 + Math.random() * 7,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 9,
+      vy: -Math.random() * 6 - 2.5,
+      angle: Math.random() * 360,
+      vAngle: (Math.random() - 0.5) * 14,
+      opacity: 1,
+    }));
+
+    let frameId: number;
+    const gravity = 0.16;
+    const drag = 0.985;
+    const start = performance.now();
+
+    const render = (now: number) => {
+      const elapsed = now - start;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      let visible = 0;
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += gravity;
+        p.vx *= drag;
+        p.angle += p.vAngle;
+
+        if (elapsed > 1800) {
+          p.opacity = Math.max(0, p.opacity - 0.025);
+        }
+
+        if (p.opacity > 0 && p.y < canvas.height + 40) {
+          visible++;
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.angle * Math.PI) / 180);
+          ctx.globalAlpha = p.opacity;
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+          ctx.restore();
+        }
+      }
+
+      if (visible > 0 && elapsed < 3400) {
+        frameId = requestAnimationFrame(render);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    };
+
+    frameId = requestAnimationFrame(render);
+    return () => cancelAnimationFrame(frameId);
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 pointer-events-none z-20 w-full h-full"
+    />
+  );
+}
+
 export default function ResultsPortalPage() {
   const [usnInput, setUsnInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -329,12 +449,18 @@ export default function ResultsPortalPage() {
           /* ============================================================ */
           /* RESULT DISPLAY CARD (When matching USN found) */
           /* ============================================================ */
-          <section className="bg-[#081432] border-2 border-amber-500/50 rounded-2xl p-5 sm:p-8 shadow-2xl shadow-black/60 relative overflow-hidden animate-fadeIn">
+          <section className="bg-[#081432] border-2 border-amber-500/50 rounded-2xl p-5 sm:p-8 shadow-2xl shadow-black/60 relative overflow-hidden animate-resultCardReveal">
+            {/* Confetti Celebration Burst */}
+            <ConfettiCanvas />
+
+            {/* Glowing top border beam */}
+            <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400 to-transparent animate-pulse pointer-events-none" />
+
             {/* Subtle corner watermark accent */}
             <div className="absolute -top-12 -right-12 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
             
             {/* Card Official Top Bar */}
-            <div className="text-center pb-4 border-b border-amber-500/20">
+            <div className="text-center pb-4 border-b border-amber-500/20 animate-fadeSlideUp-1">
               <div className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
                 {portalConfig.recruitmentTitle}
               </div>
@@ -350,9 +476,12 @@ export default function ResultsPortalPage() {
             <div className="py-6 space-y-5">
               
               {/* RANK */}
-              <div className="text-center">
-                <div className="text-3xl sm:text-4xl font-extrabold font-serif text-amber-300 tracking-tight">
-                  {String(candidateResult.rank).padStart(2, "0")}
+              <div className="text-center animate-popIn">
+                <div className="inline-block relative">
+                  <div className="absolute inset-0 bg-amber-500/20 blur-xl rounded-full scale-150 pointer-events-none" />
+                  <div className="relative text-3xl sm:text-4xl font-extrabold font-serif text-amber-300 tracking-tight drop-shadow-[0_2px_12px_rgba(245,158,11,0.4)]">
+                    {String(candidateResult.rank).padStart(2, "0")}
+                  </div>
                 </div>
                 <div className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5">
                   RANK
@@ -360,7 +489,7 @@ export default function ResultsPortalPage() {
               </div>
 
               {/* NAME & USN */}
-              <div className="text-center pt-2 border-t border-white/5">
+              <div className="text-center pt-2 border-t border-white/5 animate-fadeSlideUp-2">
                 <div className="text-lg sm:text-xl font-bold text-white tracking-wide">
                   {candidateResult.name}
                 </div>
@@ -373,9 +502,10 @@ export default function ResultsPortalPage() {
               </div>
 
               {/* SCORE */}
-              <div className="text-center pt-2 border-t border-white/5">
+              <div className="text-center pt-2 border-t border-white/5 animate-fadeSlideUp-3">
                 <div className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                  {candidateResult.score} <span className="text-base sm:text-lg font-medium text-slate-400">/ 100</span>
+                  <AnimatedScore score={candidateResult.score} />{" "}
+                  <span className="text-base sm:text-lg font-medium text-slate-400">/ 100</span>
                 </div>
                 <div className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase mt-0.5">
                   SCORE
@@ -383,20 +513,20 @@ export default function ResultsPortalPage() {
               </div>
 
               {/* STATUS: QUALIFIED FOR ROUND 2 */}
-              <div className="pt-3">
-                <div className="bg-emerald-950/60 border-2 border-emerald-500/70 rounded-xl py-3 px-4 text-center shadow-inner">
+              <div className="pt-3 animate-fadeSlideUp-4">
+                <div className="bg-emerald-950/70 border-2 border-emerald-500/70 rounded-xl py-3.5 px-4 text-center shadow-inner animate-statusGlowPulse">
                   <div className="text-[10px] sm:text-[11px] font-bold tracking-[0.25em] text-emerald-400/90 uppercase">
                     STATUS
                   </div>
                   <div className="text-base sm:text-lg font-extrabold text-emerald-300 tracking-wider uppercase mt-0.5 flex items-center justify-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 animate-checkBounce" />
                     <span>{candidateResult.status}</span>
                   </div>
                 </div>
               </div>
 
               {/* WhatsApp Interview Notification Message */}
-              <div className="bg-[#0b1b42] border border-amber-500/30 rounded-xl p-4 text-center">
+              <div className="bg-[#0b1b42] border border-amber-500/30 rounded-xl p-4 text-center animate-fadeSlideUp-5">
                 <p className="text-xs sm:text-sm text-amber-100/90 leading-relaxed font-normal">
                   “{portalConfig.interviewMessage}”
                 </p>
@@ -405,7 +535,7 @@ export default function ResultsPortalPage() {
             </div>
 
             {/* ACTION BUTTONS: DOWNLOAD, SHARE, and CHECK ANOTHER USN */}
-            <div className="pt-5 border-t border-white/10 space-y-3">
+            <div className="pt-5 border-t border-white/10 space-y-3 animate-fadeSlideUp-5">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                 {/* 1. DOWNLOAD RESULT CARD (Prominent) */}
                 <button
