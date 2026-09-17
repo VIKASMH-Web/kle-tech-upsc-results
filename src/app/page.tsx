@@ -18,6 +18,7 @@ import {
   Share2,
   ArrowLeft,
   Mail,
+  Phone,
 } from "lucide-react";
 
 interface ResultData {
@@ -193,6 +194,25 @@ export default function ResultsPortalPage() {
       }
     } finally {
       setIsGeneratingCard(false);
+    }
+  };
+
+  const handleEmailRedirect = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const mailtoUrl = `mailto:${portalConfig.queryContact.email}?subject=UPSC%20Mock%20Prelims%20Round%201%20Query`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${portalConfig.queryContact.email}&su=UPSC+Mock+Prelims+Round+1+Query`;
+
+    // Attempt system mailto first
+    window.location.href = mailtoUrl;
+
+    // On desktop browsers where default mail client is often not configured, open Gmail composer
+    if (typeof navigator !== "undefined") {
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (!isMobile) {
+        setTimeout(() => {
+          window.open(gmailUrl, "_blank", "noopener,noreferrer");
+        }, 150);
+      }
     }
   };
 
@@ -440,13 +460,42 @@ export default function ResultsPortalPage() {
               <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
                 {portalConfig.queryContact.instruction}
               </p>
-              <div className="mt-2">
+              
+              {/* Redirectable Contact Options: Email, Mobile, WhatsApp */}
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+                {/* 1. Redirectable Email */}
                 <a
-                  href={`mailto:${portalConfig.queryContact.email}`}
-                  className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-500/40 hover:decoration-amber-300 transition-colors"
+                  href={`mailto:${portalConfig.queryContact.email}?subject=UPSC%20Mock%20Prelims%20Round%201%20Query`}
+                  onClick={handleEmailRedirect}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0b1b42] hover:bg-[#122b68] border border-amber-500/30 hover:border-amber-400 text-amber-300 hover:text-amber-200 text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
+                  title="Send Email (Opens Mail App / Gmail)"
                 >
                   <Mail className="w-3.5 h-3.5 shrink-0 text-amber-400" />
                   <span>{portalConfig.queryContact.email}</span>
+                </a>
+
+                {/* 2. Redirectable Mobile Number */}
+                <a
+                  href={`tel:${portalConfig.queryContact.phoneRaw}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0b1b42] hover:bg-[#122b68] border border-amber-500/30 hover:border-amber-400 text-amber-300 hover:text-amber-200 text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
+                  title="Call Mobile Number"
+                >
+                  <Phone className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                  <span>{portalConfig.queryContact.phone}</span>
+                </a>
+
+                {/* 3. Redirectable WhatsApp Direct Chat */}
+                <a
+                  href={portalConfig.queryContact.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0b1b42] hover:bg-[#0c2b20] border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-emerald-200 text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
+                  title="Chat on WhatsApp"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0 fill-current text-emerald-400" viewBox="0 0 24 24">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.585 1.961.954 2.791.955h.005c3.181 0 5.767-2.586 5.768-5.766 0-1.541-.601-2.99-1.691-4.08-1.09-1.091-2.54-1.691-4.082-1.691zm0-2.172c4.378 0 7.94 3.562 7.94 7.938 0 2.119-.824 4.11-2.325 5.61s-3.491 2.328-5.615 2.328c-1.348 0-2.671-.344-3.843-.996l-5.188 1.358 1.385-5.053c-.718-1.229-1.098-2.637-1.098-4.247 0-4.376 3.562-7.938 7.944-7.938zm-3.666 5.176c-.198-.44-.407-.449-.596-.457-.154-.007-.33-.007-.506-.007s-.462.066-.704.33c-.242.264-.924.903-.924 2.201s.946 2.553 1.078 2.729c.132.176 1.826 2.899 4.498 3.968 2.221.888 2.673.711 3.157.667.484-.044 1.562-.638 1.782-1.254.22-.616.22-1.144.154-1.254-.066-.11-.242-.176-.506-.308s-1.562-.77-1.804-.858c-.242-.088-.418-.132-.594.132-.176.264-.682.858-.836 1.034-.154.176-.308.198-.572.066-.264-.132-1.114-.41-2.122-1.309-.785-.699-1.315-1.563-1.469-1.827-.154-.264-.016-.407.116-.538.119-.118.264-.308.396-.462.132-.154.176-.264.264-.44.088-.176.044-.33-.022-.462-.066-.132-.594-1.431-.814-1.96z"/>
+                  </svg>
+                  <span>WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -487,13 +536,42 @@ export default function ResultsPortalPage() {
               <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
                 {portalConfig.queryContact.notFoundInstruction}
               </p>
-              <div className="mt-2">
+              
+              {/* Redirectable Contact Options: Email, Mobile, WhatsApp */}
+              <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+                {/* 1. Redirectable Email */}
                 <a
-                  href={`mailto:${portalConfig.queryContact.email}`}
-                  className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-500/40 hover:decoration-amber-300 transition-colors"
+                  href={`mailto:${portalConfig.queryContact.email}?subject=UPSC%20Mock%20Prelims%20Round%201%20Query`}
+                  onClick={handleEmailRedirect}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0b1b42] hover:bg-[#122b68] border border-amber-500/30 hover:border-amber-400 text-amber-300 hover:text-amber-200 text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
+                  title="Send Email (Opens Mail App / Gmail)"
                 >
                   <Mail className="w-3.5 h-3.5 shrink-0 text-amber-400" />
                   <span>{portalConfig.queryContact.email}</span>
+                </a>
+
+                {/* 2. Redirectable Mobile Number */}
+                <a
+                  href={`tel:${portalConfig.queryContact.phoneRaw}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0b1b42] hover:bg-[#122b68] border border-amber-500/30 hover:border-amber-400 text-amber-300 hover:text-amber-200 text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
+                  title="Call Mobile Number"
+                >
+                  <Phone className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                  <span>{portalConfig.queryContact.phone}</span>
+                </a>
+
+                {/* 3. Redirectable WhatsApp Direct Chat */}
+                <a
+                  href={portalConfig.queryContact.whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0b1b42] hover:bg-[#0c2b20] border border-emerald-500/40 hover:border-emerald-400 text-emerald-300 hover:text-emerald-200 text-xs sm:text-sm font-semibold transition-all shadow-sm cursor-pointer"
+                  title="Chat on WhatsApp"
+                >
+                  <svg className="w-3.5 h-3.5 shrink-0 fill-current text-emerald-400" viewBox="0 0 24 24">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.669-.699c.969.585 1.961.954 2.791.955h.005c3.181 0 5.767-2.586 5.768-5.766 0-1.541-.601-2.99-1.691-4.08-1.09-1.091-2.54-1.691-4.082-1.691zm0-2.172c4.378 0 7.94 3.562 7.94 7.938 0 2.119-.824 4.11-2.325 5.61s-3.491 2.328-5.615 2.328c-1.348 0-2.671-.344-3.843-.996l-5.188 1.358 1.385-5.053c-.718-1.229-1.098-2.637-1.098-4.247 0-4.376 3.562-7.938 7.944-7.938zm-3.666 5.176c-.198-.44-.407-.449-.596-.457-.154-.007-.33-.007-.506-.007s-.462.066-.704.33c-.242.264-.924.903-.924 2.201s.946 2.553 1.078 2.729c.132.176 1.826 2.899 4.498 3.968 2.221.888 2.673.711 3.157.667.484-.044 1.562-.638 1.782-1.254.22-.616.22-1.144.154-1.254-.066-.11-.242-.176-.506-.308s-1.562-.77-1.804-.858c-.242-.088-.418-.132-.594.132-.176.264-.682.858-.836 1.034-.154.176-.308.198-.572.066-.264-.132-1.114-.41-2.122-1.309-.785-.699-1.315-1.563-1.469-1.827-.154-.264-.016-.407.116-.538.119-.118.264-.308.396-.462.132-.154.176-.264.264-.44.088-.176.044-.33-.022-.462-.066-.132-.594-1.431-.814-1.96z"/>
+                  </svg>
+                  <span>WhatsApp</span>
                 </a>
               </div>
             </div>
@@ -562,16 +640,37 @@ export default function ResultsPortalPage() {
               </button>
 
               {/* Subtle Query Assistance Note */}
-              <div className="mt-4 pt-3 border-t border-white/5 text-center">
+              <div className="mt-4 pt-3 border-t border-white/5 text-center space-y-2">
                 <p className="text-[11px] sm:text-xs text-slate-400 leading-relaxed">
-                  {portalConfig.queryContact.searchHelpText}:{" "}
-                  <a
-                    href={`mailto:${portalConfig.queryContact.email}`}
-                    className="text-amber-400 hover:text-amber-300 underline underline-offset-2 decoration-amber-500/40 transition-colors"
-                  >
-                    {portalConfig.queryContact.email}
-                  </a>
+                  {portalConfig.queryContact.searchHelpText}:
                 </p>
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  <a
+                    href={`mailto:${portalConfig.queryContact.email}?subject=UPSC%20Mock%20Prelims%20Query`}
+                    onClick={handleEmailRedirect}
+                    className="inline-flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 underline underline-offset-2 decoration-amber-500/40 cursor-pointer"
+                  >
+                    <Mail className="w-3 h-3" />
+                    <span>{portalConfig.queryContact.email}</span>
+                  </a>
+                  <span className="text-slate-600">•</span>
+                  <a
+                    href={`tel:${portalConfig.queryContact.phoneRaw}`}
+                    className="inline-flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 underline underline-offset-2 decoration-amber-500/40 cursor-pointer"
+                  >
+                    <Phone className="w-3 h-3" />
+                    <span>{portalConfig.queryContact.phone}</span>
+                  </a>
+                  <span className="text-slate-600">•</span>
+                  <a
+                    href={portalConfig.queryContact.whatsappUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 underline underline-offset-2 decoration-emerald-500/40 cursor-pointer"
+                  >
+                    <span>WhatsApp</span>
+                  </a>
+                </div>
               </div>
             </form>
           </section>

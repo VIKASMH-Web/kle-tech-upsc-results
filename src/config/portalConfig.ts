@@ -48,5 +48,8 @@ export const portalConfig = {
     notFoundInstruction: "If you wrote the exam and couldn't find your result, or have any discrepancy, please contact:",
     searchHelpText: "If you wrote the exam and cannot find your result, please contact",
     email: "vikasmhgdg@gmail.com",
+    phone: "+91 70197 73187",
+    phoneRaw: "+917019773187",
+    whatsappUrl: "https://wa.me/917019773187?text=Hello%2C%20I%20have%20a%20query%20regarding%20my%20UPSC%20Mock%20Prelims%20Round%201%20result",
   },
 };
