@@ -17,6 +17,7 @@ import {
   Download,
   Share2,
   ArrowLeft,
+  Mail,
 } from "lucide-react";
 
 interface ResultData {
@@ -428,6 +429,27 @@ export default function ResultsPortalPage() {
                 </button>
               </div>
             </div>
+
+            {/* ============================================================ */}
+            {/* RESULT QUERIES & DISCREPANCIES */}
+            {/* ============================================================ */}
+            <div className="mt-5 pt-4 border-t border-white/10 text-center">
+              <div className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
+                {portalConfig.queryContact.title}
+              </div>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+                {portalConfig.queryContact.instruction}
+              </p>
+              <div className="mt-2">
+                <a
+                  href={`mailto:${portalConfig.queryContact.email}`}
+                  className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-500/40 hover:decoration-amber-300 transition-colors"
+                >
+                  <Mail className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                  <span>{portalConfig.queryContact.email}</span>
+                </a>
+              </div>
+            </div>
           </section>
         ) : searchStatus === "not_found" ? (
           /* ============================================================ */
@@ -453,6 +475,27 @@ export default function ResultsPortalPage() {
                 <RotateCcw className="w-4 h-4" />
                 <span>TRY AGAIN</span>
               </button>
+            </div>
+
+            {/* ============================================================ */}
+            {/* RESULT QUERIES & DISCREPANCIES */}
+            {/* ============================================================ */}
+            <div className="mt-5 pt-4 border-t border-white/10 text-center">
+              <div className="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
+                {portalConfig.queryContact.title}
+              </div>
+              <p className="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+                {portalConfig.queryContact.instruction}
+              </p>
+              <div className="mt-2">
+                <a
+                  href={`mailto:${portalConfig.queryContact.email}`}
+                  className="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-500/40 hover:decoration-amber-300 transition-colors"
+                >
+                  <Mail className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                  <span>{portalConfig.queryContact.email}</span>
+                </a>
+              </div>
             </div>
           </section>
         ) : (

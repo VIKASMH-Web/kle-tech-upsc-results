@@ -255,6 +255,29 @@
           </button>
         </div>
       </div>
+
+      <!-- ============================================================ -->
+      <!-- RESULT QUERIES & DISCREPANCIES -->
+      <!-- ============================================================ -->
+      <div class="mt-5 pt-4 border-t border-white/10 text-center">
+        <div class="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
+          RESULT QUERIES &amp; DISCREPANCIES
+        </div>
+        <p class="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+          For any discrepancy or query regarding your result, please contact:
+        </p>
+        <div class="mt-2">
+          <a
+            href="mailto:vikasmhgdg@gmail.com"
+            class="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-500/40 hover:decoration-amber-300 transition-colors"
+          >
+            <svg class="w-3.5 h-3.5 shrink-0 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span>vikasmhgdg@gmail.com</span>
+          </a>
+        </div>
+      </div>
     </section>
 
     <!-- ============================================================ -->
@@ -284,6 +307,29 @@
           </svg>
           <span>TRY AGAIN</span>
         </button>
+      </div>
+
+      <!-- ============================================================ -->
+      <!-- RESULT QUERIES & DISCREPANCIES -->
+      <!-- ============================================================ -->
+      <div class="mt-5 pt-4 border-t border-white/10 text-center">
+        <div class="text-[10px] sm:text-xs font-bold tracking-[0.2em] text-slate-400 uppercase">
+          RESULT QUERIES &amp; DISCREPANCIES
+        </div>
+        <p class="text-xs sm:text-sm text-slate-300 mt-1.5 leading-relaxed">
+          For any discrepancy or query regarding your result, please contact:
+        </p>
+        <div class="mt-2">
+          <a
+            href="mailto:vikasmhgdg@gmail.com"
+            class="inline-flex items-center justify-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-400 hover:text-amber-300 underline underline-offset-4 decoration-amber-500/40 hover:decoration-amber-300 transition-colors"
+          >
+            <svg class="w-3.5 h-3.5 shrink-0 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <span>vikasmhgdg@gmail.com</span>
+          </a>
+        </div>
       </div>
     </section>
 
@@ -387,14 +433,17 @@
 
     async function loadResults() {
       if (candidatesCache) return candidatesCache;
-      try {
-        const res = await fetch('../results.json');
-        if (res.ok) {
-          candidatesCache = await res.json();
-          return candidatesCache;
+      const candidatePaths = ['results.json', './results.json', '/results.json', '../results.json'];
+      for (const p of candidatePaths) {
+        try {
+          const res = await fetch(p);
+          if (res.ok) {
+            candidatesCache = await res.json();
+            return candidatesCache;
+          }
+        } catch (e) {
+          // try next path
         }
-      } catch (e) {
-        console.warn('Fetch fallback to embedded data:', e);
       }
       return null;
     }

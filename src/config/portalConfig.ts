@@ -40,4 +40,11 @@ export const portalConfig = {
   unannouncedNotice: "RESULTS WILL BE ANNOUNCED SOON",
   unannouncedSubtitle:
     "Round 1 mock prelims evaluation is currently under official verification. Results will be published here shortly.",
+
+  // Discrepancy & Query Contact
+  queryContact: {
+    title: "RESULT QUERIES & DISCREPANCIES",
+    instruction: "For any discrepancy or query regarding your result, please contact:",
+    email: "vikasmhgdg@gmail.com",
+  },
 };
