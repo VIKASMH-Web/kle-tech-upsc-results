@@ -17,8 +17,9 @@ export const portalConfig = {
   roundTitle: "ROUND 1",
   examTitle: "UPSC MOCK PRELIMS — RESULTS",
 
-  // Official Social Media Links
+  // Official Social Media & Community Links
   socialLinks: {
+    whatsapp: "https://chat.whatsapp.com/Hfx5fOYAs0f42U6xM0qjOX",
     instagram: "https://www.instagram.com/upsc_aspirants_kletech?stkn=MWZhMjhwbTJnMWY4eA==",
     linkedin: "https://www.linkedin.com/company/upsc-aspirants-club-kle-tech/",
   },
