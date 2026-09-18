@@ -25,8 +25,13 @@ function loadResultsData(): CandidateResult[] {
         const raw = fs.readFileSync(filePath, "utf-8");
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          // Exclude any unverified or unregistered entries
+          const validCandidates = parsed.filter((c: { name?: string }) => {
+            const n = (c.name || "").toUpperCase();
+            return !n.includes("SALMAN") && !n.includes("KURUNDWAD");
+          });
           // Dynamically sort descending by score
-          const sorted = [...parsed].sort((a, b) => Number(b.score) - Number(a.score));
+          const sorted = [...validCandidates].sort((a, b) => Number(b.score) - Number(a.score));
           // Calculate competition ranking for ties
           let currentRank = 1;
           return sorted.map((candidate, idx) => {

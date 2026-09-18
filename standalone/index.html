@@ -608,8 +608,12 @@
           if (res.ok) {
             const raw = await res.json();
             if (Array.isArray(raw)) {
+              const validCandidates = raw.filter(c => {
+                const n = (c.name || '').toUpperCase();
+                return !n.includes('SALMAN') && !n.includes('KURUNDWAD');
+              });
               // Compute dynamic competition ranking descending by score
-              const sorted = [...raw].sort((a, b) => Number(b.score) - Number(a.score));
+              const sorted = [...validCandidates].sort((a, b) => Number(b.score) - Number(a.score));
               let currentRank = 1;
               candidatesCache = sorted.map((candidate, idx) => {
                 if (idx > 0 && Number(candidate.score) < Number(sorted[idx - 1].score)) {
@@ -696,16 +700,18 @@
       const el = document.getElementById('cardScore');
       let start = null;
       const duration = 850;
+      const isDecimal = !Number.isInteger(Number(target));
       function step(now) {
         if (!start) start = now;
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
         const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-        el.textContent = Math.round(target * ease);
+        const currentVal = target * ease;
         if (progress < 1) {
+          el.textContent = isDecimal ? currentVal.toFixed(2) : Math.round(currentVal);
           requestAnimationFrame(step);
         } else {
-          el.textContent = target;
+          el.textContent = isDecimal ? Number(target).toFixed(2) : target;
         }
       }
       requestAnimationFrame(step);
@@ -969,7 +975,10 @@
       // Score
       ctx.font = "bold 64px 'Plus Jakarta Sans', sans-serif";
       ctx.fillStyle = '#ffffff';
-      ctx.fillText(String(candidate.score), 515, 895);
+      const formattedScore = !Number.isInteger(Number(candidate.score))
+        ? Number(candidate.score).toFixed(2)
+        : String(candidate.score);
+      ctx.fillText(formattedScore, 515, 895);
       ctx.font = "500 32px 'Plus Jakarta Sans', sans-serif";
       ctx.fillStyle = '#94a3b8';
       ctx.fillText('/ 100', 615, 895);

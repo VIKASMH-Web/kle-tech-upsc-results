@@ -241,8 +241,10 @@ export async function generateResultCardBlob(
 
   // --- SCORE SECTION ---
   ctx.font = "bold 64px 'Plus Jakarta Sans', -apple-system, sans-serif";
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText(String(candidate.score), 515, 895);
+  const formattedScore = !Number.isInteger(Number(candidate.score))
+    ? Number(candidate.score).toFixed(2)
+    : String(candidate.score);
+  ctx.fillText(formattedScore, 515, 895);
 
   ctx.font = "500 32px 'Plus Jakarta Sans', -apple-system, sans-serif";
   ctx.fillStyle = "#94a3b8";

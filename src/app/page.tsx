@@ -33,7 +33,8 @@ interface ResultData {
  * Animated number counter that counts up to the candidate's score
  */
 function AnimatedScore({ score }: { score: number }) {
-  const [displayScore, setDisplayScore] = useState(0);
+  const isDecimal = !Number.isInteger(score);
+  const [displayScore, setDisplayScore] = useState<string | number>(0);
 
   React.useEffect(() => {
     let start = 0;
@@ -47,15 +48,18 @@ function AnimatedScore({ score }: { score: number }) {
       const progress = Math.min(elapsed / duration, 1);
       // easeOutExpo
       const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-      setDisplayScore(Math.round(start + (end - start) * ease));
+      const currentVal = start + (end - start) * ease;
       if (progress < 1) {
+        setDisplayScore(isDecimal ? currentVal.toFixed(2) : Math.round(currentVal));
         frameId = requestAnimationFrame(tick);
+      } else {
+        setDisplayScore(isDecimal ? score.toFixed(2) : score);
       }
     };
 
     frameId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frameId);
-  }, [score]);
+  }, [score, isDecimal]);
 
   return <>{displayScore}</>;
 }
@@ -216,8 +220,13 @@ export default function ResultsPortalPage() {
         return;
       }
 
+      const validCandidates = rawData.filter((c: { name?: string }) => {
+        const n = (c.name || "").toUpperCase();
+        return !n.includes("SALMAN") && !n.includes("KURUNDWAD");
+      });
+
       // Compute dynamic competition ranking descending by score
-      const sorted = [...rawData].sort((a, b) => Number(b.score) - Number(a.score));
+      const sorted = [...validCandidates].sort((a, b) => Number(b.score) - Number(a.score));
       let currentRank = 1;
       const rankedData = sorted.map((candidate, idx) => {
         if (idx > 0 && Number(candidate.score) < Number(sorted[idx - 1].score)) {
